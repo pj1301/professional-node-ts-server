@@ -1,0 +1,19 @@
+version: "3.8"
+
+services: 
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: node-server
+    container_name: node-server 
+    restart: unless-stopped
+    volumes: 
+      - .:/src
+      - node_modules:/src/node_modules
+    ports:
+      - "2000:2000"
+    command: npm start
+
+volumes:
+  node_modules:

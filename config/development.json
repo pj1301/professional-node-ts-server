@@ -1,0 +1,7 @@
+{
+  "apiUrl": "/api/v1",
+  "allowedOrigins": [
+    "http://localhost:4200"
+  ],
+  "port": "2000"
+}
