@@ -3,5 +3,9 @@
   "allowedOrigins": [
     "http://localhost:4200"
   ],
+  "mongoDb": {
+    "url": "mongodb://localhost:27017",
+    "db": "myDB"
+  },
   "port": "2000"
 }

@@ -16,10 +16,12 @@
   "dependencies": {
     "@types/config": "0.0.36",
     "@types/cors": "^2.8.6",
+    "@types/mongodb": "^3.5.25",
     "@types/morgan": "^1.9.1",
     "config": "^3.3.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "mongodb": "^3.5.9",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.4",
     "ts-node": "^8.10.2",
