@@ -1,7 +1,9 @@
 import config from 'config';
 import { MongoClient, MongoClientOptions } from 'mongodb';
 
-export class MongoDatabaseClient {
+type DBClient = MongoClient;
+
+class MongoDatabaseClient {
   public client!: MongoClient;
   private mongoDbOpt: MongoClientOptions = { useUnifiedTopology: true };
 
@@ -15,3 +17,4 @@ export class MongoDatabaseClient {
   }
 }
 
+export { MongoDatabaseClient, DBClient };

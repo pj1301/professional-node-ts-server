@@ -42,4 +42,90 @@ A decorator is an example of a higher-order function which effectively wraps one
 
 When considering Decorators at first it might be tempting to turn everything into a Decorator, however, it should be reserved for stable code which is reused many times inside your application. 
 
->Note: Decorators can only be used inside classes.
+>Note: It appears that Decorators can only be used with/inside classes.
+
+&nbsp;
+## Code
+
+&nbsp;
+### Set Up
+First add inversify and the express utils package:
+
+```bash
+npm install inversify inversify-express-utils reflect-metadata --save
+```
+
+Then update tsconfig.json, the following fields must be active with the values specified:
+
+```json
+{
+  "compilerOptions": {
+    "target": "es5",                         
+    "module": "commonjs",                     
+    "lib": ["ES6", "dom"],                            
+    "strict": true,                           
+    "moduleResolution": "node",            
+    "types": ["reflect-metadata"],                        
+    "esModuleInterop": true,                
+    "experimentalDecorators": true,        
+    "emitDecoratorMetadata": true,         
+    "skipLibCheck": true,                     
+    "forceConsistentCasingInFileNames": true 
+  }
+}
+```
+
+&nbsp;
+### Container
+To work with IoC, we need to have a central container from which all other classes resolve their dependencies. So let's create one in an independent file:
+
+```ts
+import { Container } from 'inversify';
+import { DBClient, MongoDatabaseClient } from '../../infrastructure/mongoConnection';
+import TYPES from '../config/types';
+// import services below
+
+async function makeContainer() {
+  const container = new Container();
+  // bind the services here
+  return container;
+}
+
+export { makeContainer };
+
+```
+
+&nbsp;
+### Root Server File
+**You must import reflect-metadata first!!!**
+
+This file does not need to be changed, only the files which are imported/connected to it. 
+
+```ts
+import 'reflect-metadata';
+
+import config from 'config';
+import { Application } from 'express';
+import { InversifyExpressServer } from 'inversify-express-utils';
+import './controllers/controller.module';
+import { setAppMiddleware } from './middleware/appMiddleware';
+import { makeContainer } from './services/config/inversify.config';
+import { logger } from './utils/logger';
+
+export class App {
+  private port: string = process.env.PORT || config.get('port');
+  public app!: Application;
+
+  public async init() {
+    const server = new InversifyExpressServer(await makeContainer(), null, { rootPath: '/api/v1' });
+    this.app = server
+      .setConfig((application: Application) => setAppMiddleware(application))
+      .build();
+  }
+
+  public listen() {
+    this.app.listen(this.port, () => logger.info(`Server running on port ${this.port}`));
+  }
+}
+
+````

@@ -1,26 +1,25 @@
+import 'reflect-metadata';
+
 import config from 'config';
-import express, { Request, Response, Router } from 'express';
+import { Application } from 'express';
+import { InversifyExpressServer } from 'inversify-express-utils';
+import './controllers/controller.module';
 import { setAppMiddleware } from './middleware/appMiddleware';
+import { makeContainer } from './services/config/inversify.config';
 import { logger } from './utils/logger';
 
 export class App {
   private port: string = process.env.PORT || config.get('port');
-  public app!: express.Application;
+  public app!: Application;
 
   public async init() {
-    this.app = express();
-    setAppMiddleware(this.app);
-    this.setRoutes();
+    const server = new InversifyExpressServer(await makeContainer(), null, { rootPath: '/api/v1' });
+    this.app = server
+      .setConfig((application: Application) => setAppMiddleware(application))
+      .build();
   }
 
   public listen() {
     this.app.listen(this.port, () => logger.info(`Server running on port ${this.port}`));
-  }
-
-  private setRoutes(): void {
-      this.app.get('/test', (req: Request, res: Response) => {
-      logger.info('we\'re hitting the test get route');
-      res.status(200).send({message: 'At the Get request'});
-    })
   }
 }
