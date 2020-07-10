@@ -1,8 +1,6 @@
+import config from 'config';
 import { Db, MongoClient, MongoClientOptions, MongoError } from 'mongodb';
 import { logger } from '../utils/logger';
-
-const connStr = 'mongodb://localhost:27017';
-const dbName = 'inversify-express-example';
 
 export class MongoDBConnection {
   private static isConnected: boolean = false;
@@ -21,9 +19,9 @@ export class MongoDBConnection {
   }
 
   private static connect(result: (error: MongoError, db: Db) => void) {
-    MongoClient.connect(connStr, this.mongodOpt, (err, client) => {
+    MongoClient.connect(config.get('mongoDb.url'), this.mongodOpt, (err, client) => {
       if (err) logger.error(err);
-      this.db = client.db(dbName);
+      this.db = client.db(config.get('mongoDb.db'));
       this.isConnected = true;
       return result(err, this.db);
     });

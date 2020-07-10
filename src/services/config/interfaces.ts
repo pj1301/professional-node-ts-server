@@ -1,9 +1,18 @@
 import {ObjectId} from 'mongodb';
 
 interface IDbLocator {
-  id: ObjectId;
+  _id: ObjectId;
+}
+
+interface IDbLocatorMuliple {
+  _id: IMultiQueryById;
+}
+
+interface IMultiQueryById {
+  $in: Array<ObjectId>
 }
 
 export {
-  IDbLocator
+  IDbLocator,
+  IDbLocatorMuliple
 }
