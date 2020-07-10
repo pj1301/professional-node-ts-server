@@ -1,20 +1,23 @@
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import { Db, ObjectId } from 'mongodb';
-import MongoDBConnection from "../infrastructure/mongoConnection";
-import { logger } from "../utils/logger";
-import { IDbLocator } from "./config/interfaces";
+import MongoDBConnection from '../infrastructure/mongoConnection';
+import { logger } from '../utils/logger';
+import { IDbLocator } from './config/interfaces';
+import TYPES from './config/types';
 
 @injectable()
 export class DatabaseService {
-   private db: any;
+  private db: any;
 
-  constructor() {
-    this.getDatabase().then(result => this.db = result);
+  constructor(
+     @inject(TYPES.MongoDBConnection) private connection: MongoDBConnection
+  ) {
+    this.db = connection.establishConnection();
   }
 
   public async find(collection: string, filter: object): Promise<any> {
-    console.log(this.db);
     const result = await this.db.collection(collection).find(filter).toArray();
+    console.log({result, db: this.db});
     return result;
   }
 
@@ -28,9 +31,5 @@ export class DatabaseService {
 
   public async delete(collection: string, locators: Array<ObjectId>): Promise<any> {
     return await this.db.collection(collection).deleteMany({ _id: { $in: locators } });
-  }
-
-  private async getDatabase(): Promise<Db | null> {
-    return await MongoDBConnection.establishConnection();
   }
 }
