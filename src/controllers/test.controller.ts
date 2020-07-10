@@ -45,5 +45,6 @@ export class TestController {
   public async deleteTestData(@request() req: Request, res: Response) {
     const locator = { _id: this.utilService.objectifyId(req.params.id) };
     const result = await this.dbService.deleteOne('test', locator);
+    res.status(200);
   }
 }

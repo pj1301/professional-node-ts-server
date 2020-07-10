@@ -5,7 +5,10 @@
   ],
   "mongoDb": {
     "url": "mongodb://localhost:27017",
-    "db": "inversifyDB"
+    "db": "inversifyDB",
+    "mongodOpt": {
+      "useUnifiedTopology": true
+    }
   },
   "port": "2000"
 }

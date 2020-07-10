@@ -1,16 +1,27 @@
 import config from 'config';
-import { MongoClient } from 'mongodb';
+import { Db, MongoClient, MongoClientOptions } from 'mongodb';
 import { logger } from '../utils/logger';
 
-async function getClient(): Promise<void | MongoClient> {
+async function getConnection(): Promise<any> {
+  const { db, url, mongodOpt } = config.get('mongoDb');
   let client;
   try {
-    client = await MongoClient.connect(config.get('mongoDb.url'), { useUnifiedTopology: true })
-  } catch (error) {
-      logger.error(error);
-      return;
+    client = await getClient(url, mongodOpt);
+  } catch (err) {
+    logger.error('Error connecting to the database');
+    return;
   }
-  return client;
+  if (!client) return;
+  logger.info('Successfully initialised MongoDB connection');
+  return await connect(client, db);
 }
 
-export { getClient };
+async function getClient(url: string, mongodOpt: MongoClientOptions): Promise<void | MongoClient> {
+  return await MongoClient.connect(url, mongodOpt);
+}
+
+async function connect(client: MongoClient, dbName: string): Promise<Db> {
+  return client.db(dbName);
+}
+
+export { getConnection };

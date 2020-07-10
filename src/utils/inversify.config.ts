@@ -3,7 +3,7 @@ import TYPES from '../services/config/types';
 import { MongoClient } from 'mongodb';
 
 // import services below
-import { getClient } from '../infrastructure/mongoConnection';
+import { getConnection } from '../infrastructure/mongoConnection';
 import { DatabaseService } from '../services/database.service';
 import { UtilService } from '../services/util.service';
 
@@ -15,8 +15,8 @@ export async function makeContainer() {
 }
 
 async function bindDB(container: Container): Promise<void> {
-  const dBClient = await getClient();
-  if (dBClient) container.bind<MongoClient>(TYPES.DBClient).toConstantValue(dBClient);
+  const dBConnection = await getConnection();
+  if (dBConnection) container.bind<MongoClient>(TYPES.DBClient).toConstantValue(dBConnection);
 }
 
 function bindServices(container: Container): void {
