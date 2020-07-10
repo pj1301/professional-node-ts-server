@@ -1,19 +1,25 @@
-import config from 'config';
-import express from 'express';
-import { setAppMiddleware } from './middleware/app-middleware';
-import { logger } from './utils/logger';
+import 'reflect-metadata';
 
+import config from 'config';
+import { Application } from 'express';
+import { InversifyExpressServer } from 'inversify-express-utils';
+import './controllers/controller.module';
+import { setAppMiddleware } from './middleware/appMiddleware';
+import { makeContainer } from './utils/inversify.config';
+import { logger } from './utils/logger';
 
 export class App {
   private port: string = process.env.PORT || config.get('port');
-  public app!: express.Application;
+  public app!: Application;
 
-  init() {
-    this.app = express();
-    setAppMiddleware(this.app);
+  public async init() {
+    const server = new InversifyExpressServer(await makeContainer(), null, { rootPath: '/api/v1' });
+    this.app = server
+      .setConfig((application: Application) => setAppMiddleware(application))
+      .build();
   }
 
-  listen() {
+  public listen() {
     this.app.listen(this.port, () => logger.info(`Server running on port ${this.port}`));
   }
 }

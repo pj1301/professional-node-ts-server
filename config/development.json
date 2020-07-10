@@ -3,5 +3,12 @@
   "allowedOrigins": [
     "http://localhost:4200"
   ],
+  "mongoDb": {
+    "url": "mongodb://localhost:27017",
+    "db": "inversifyDB",
+    "mongodOpt": {
+      "useUnifiedTopology": true
+    }
+  },
   "port": "2000"
 }
