@@ -1,5 +1,5 @@
 const TYPES = {
-  MongoDBConnection: Symbol('MongoDBConnection'),
+  DBClient: Symbol.for('DBClient'),
   DatabaseService: Symbol('DatabaseService'),
   TestDataService: Symbol('TestDataService'),
   UtilService: Symbol('UtilService')
