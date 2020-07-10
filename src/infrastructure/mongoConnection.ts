@@ -1,20 +1,26 @@
 import config from 'config';
-import { MongoClient, MongoClientOptions } from 'mongodb';
+import { Db, MongoClient, MongoClientOptions } from 'mongodb';
 
-type DBClient = MongoClient;
+class MongoDBConnection {
+  private static mongoDbOpt: MongoClientOptions = { useUnifiedTopology: true };
+  private static dbName: string = config.get('mongoDb.db');
+  private static url: string = config.get('mongoDb.url');
+  private static connected: boolean = false;
+  private static db: Db;
 
-class MongoDatabaseClient {
-  public client!: MongoClient;
-  private mongoDbOpt: MongoClientOptions = { useUnifiedTopology: true };
+  constructor() {}
 
-  public async getDatabaseClient(): Promise<MongoClient> {
-    const  client = new MongoClient(config.get('mongoDb.url'), this.mongoDbOpt);
-    return await client.connect();
+  public static async establishConnection(): Promise<Db | null> {
+    if (!this.connected) await this.connect();
+    return this.db ? this.db : null;
   }
 
-  public closeClient(): void {
-    this.client.close();
+  private static async connect(): Promise<void | false> {
+    const client = await MongoClient.connect(this.url, this.mongoDbOpt);
+    if (!client) return;
+    this.db = client.db(this.dbName);
+    this.connected = true;
   }
 }
 
-export { MongoDatabaseClient, DBClient };
+export default MongoDBConnection;

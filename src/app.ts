@@ -5,7 +5,7 @@ import { Application } from 'express';
 import { InversifyExpressServer } from 'inversify-express-utils';
 import './controllers/controller.module';
 import { setAppMiddleware } from './middleware/appMiddleware';
-import { makeContainer } from './services/config/inversify.config';
+import { makeContainer } from './utils/inversify.config';
 import { logger } from './utils/logger';
 
 export class App {
