@@ -2,7 +2,7 @@ import { Container } from 'inversify';
 import TYPES from '../services/config/types';
 
 // import services below
-import MongoDBConnection from '../infrastructure/mongoConnection';
+import { MongoDBConnection } from '../infrastructure/mongoConnection';
 import { DatabaseService } from '../services/database.service';
 
 export async function makeContainer() {

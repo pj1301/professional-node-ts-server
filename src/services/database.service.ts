@@ -1,23 +1,20 @@
 import { inject, injectable } from 'inversify';
 import { Db, ObjectId } from 'mongodb';
-import MongoDBConnection from '../infrastructure/mongoConnection';
+import { MongoDBConnection } from '../infrastructure/mongoConnection';
 import { logger } from '../utils/logger';
 import { IDbLocator } from './config/interfaces';
 import TYPES from './config/types';
 
 @injectable()
 export class DatabaseService {
-  private db: any;
+  public db!: Db;
 
-  constructor(
-     @inject(TYPES.MongoDBConnection) private connection: MongoDBConnection
-  ) {
-    this.db = connection.establishConnection();
+  constructor() {
+    MongoDBConnection.getConnection((connection: Db) => this.db = connection);
   }
 
   public async find(collection: string, filter: object): Promise<any> {
     const result = await this.db.collection(collection).find(filter).toArray();
-    console.log({result, db: this.db});
     return result;
   }
 

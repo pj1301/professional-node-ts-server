@@ -1,30 +1,31 @@
-import config from 'config';
-import { injectable } from 'inversify';
-import { Db, MongoClient, MongoClientOptions } from 'mongodb';
+import { Db, MongoClient, MongoClientOptions, MongoError } from 'mongodb';
 import { logger } from '../utils/logger';
 
-@injectable()
-class MongoDBConnection {
-  private mongoDbOpt: MongoClientOptions = { useUnifiedTopology: true };
-  private dbName: string = config.get('mongoDb.db');
-  private url: string = config.get('mongoDb.url');
-  private open = false;
-  private db!: Db;
+const connStr = 'mongodb://localhost:27017';
+const dbName = 'inversify-express-example';
 
-  constructor() {}
+export class MongoDBConnection {
+  private static isConnected: boolean = false;
+  private static db: Db;
+  private static mongodOpt: MongoClientOptions = { useUnifiedTopology: true };
 
-  public async establishConnection(): Promise<Db | null> {
-    if (!this.open) await this.connect();
-    logger.info('MongoDB connection established');
-    return this.db ? this.db : null;
+  public static getConnection(result: (connection: Db) => void) {
+    if (this.isConnected) {
+      return result(this.db);
+    } else {
+      this.connect((error, db: Db) => {
+        if (error) logger.error(error);
+        return result(this.db);
+      });
+    }
   }
 
-  private async connect(): Promise<void | false> {
-    const client = await MongoClient.connect(this.url, this.mongoDbOpt);
-    if (!client) return;
-    this.open = true;
-    this.db = client.db(this.dbName);
+  private static connect(result: (error: MongoError, db: Db) => void) {
+    MongoClient.connect(connStr, this.mongodOpt, (err, client) => {
+      if (err) logger.error(err);
+      this.db = client.db(dbName);
+      this.isConnected = true;
+      return result(err, this.db);
+    });
   }
 }
-
-export default MongoDBConnection;
