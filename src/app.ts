@@ -5,7 +5,7 @@ import { Application } from 'express';
 import { InversifyExpressServer } from 'inversify-express-utils';
 import './controllers/controller.module';
 import { setAppMiddleware } from './middleware/appMiddleware';
-import { makeContainer } from './utils/inversify.config';
+import { DIContainer } from './services/config/inversify.config';
 import { logger } from './utils/logger';
 
 export class App {
@@ -13,7 +13,8 @@ export class App {
   public app!: Application;
 
   public async init() {
-    const server = new InversifyExpressServer(await makeContainer(), null, { rootPath: '/api/v1' });
+    const container = await DIContainer.makeContainer();
+    const server = new InversifyExpressServer(container, null, { rootPath: '/api/v1' });
     this.app = server
       .setConfig((application: Application) => setAppMiddleware(application))
       .build();

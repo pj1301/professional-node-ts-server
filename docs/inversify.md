@@ -76,22 +76,95 @@ Then update tsconfig.json, the following fields must be active with the values s
 ```
 
 &nbsp;
-### Container
-To work with IoC, we need to have a central container from which all other classes resolve their dependencies. So let's create one in an independent file:
+### Container & Bindings
+To work with IoC, we need to have a central container from which all other classes resolve their dependencies. So let's create one in an independent file. The most important elements of this file are:
+
+* The binding of the database connection 
+* The binding of other services from the application
+
 
 ```ts
-import { Container } from 'inversify';
-import { DBClient, MongoDatabaseClient } from '../../infrastructure/mongoConnection';
-import TYPES from '../config/types';
-// import services below
+// inversify.config.ts
 
-async function makeContainer() {
+import { Container } from 'inversify';
+import TYPES from '../services/config/types';
+import { MongoClient } from 'mongodb';
+
+// import services below
+import { getConnection } from '../infrastructure/mongoConnection';
+import { DatabaseService } from '../services/database.service';
+import { UtilService } from '../services/util.service';
+
+export async function makeContainer() {
   const container = new Container();
-  // bind the services here
+  await bindDB(container);
+  bindServices(container);
   return container;
 }
 
-export { makeContainer };
+async function bindDB(container: Container): Promise<void> {
+  const dBConnection = await getConnection();
+  if (dBConnection) container.bind<MongoClient>(TYPES.DBClient).toConstantValue(dBConnection);
+}
+
+function bindServices(container: Container): void {
+  container.bind<DatabaseService>(TYPES.DatabaseService).to(DatabaseService);
+  container.bind<UtilService>(TYPES.UtilService).to(UtilService);
+}
+
+```
+
+Each binding will allow us to inject a service into components. It's fairly easy to set up for the regular services, but a little tricky to set up for the MongoDB connection. Unlike with Angular, we don't have the option to set a DB connection to a field using an async request, the connection needs to be readily available when the injection happens. 
+
+Therefore, we establish the connection to the database using asynchronous functions **BEFORE** we bind the database to the container, **AND** when we bind, we bind the connection, not a class.
+
+To make this work we therefore need a DB connection file:
+
+```ts
+// mongoConnection.ts
+
+import config from 'config';
+import { Db, MongoClient, MongoClientOptions } from 'mongodb';
+import { logger } from '../utils/logger';
+
+async function getConnection(): Promise<any> {
+  const { db, url, mongodOpt } = config.get('mongoDb');
+  let client;
+  try {
+    client = await getClient(url, mongodOpt);
+  } catch (err) {
+    logger.error('Error connecting to the database');
+    return;
+  }
+  if (!client) return;
+  logger.info('Successfully initialised MongoDB connection');
+  return await connect(client, db);
+}
+
+async function getClient(url: string, mongodOpt: MongoClientOptions): Promise<void | MongoClient> {
+  return await MongoClient.connect(url, mongodOpt);
+}
+
+async function connect(client: MongoClient, dbName: string): Promise<Db> {
+  return client.db(dbName);
+}
+
+export { getConnection };
+
+```
+
+&nbsp;
+### TYPES
+Finally we need to set a symbol for each of the services we are going to be injecting, as each intection will require a TYPES parameter.
+
+```ts
+// types.ts
+
+const TYPES = {
+  DBClient: Symbol('DBClient'),
+}
+
+export { TYPES };
 
 ```
 
@@ -128,4 +201,15 @@ export class App {
   }
 }
 
-````
+```
+
+&nbsp;
+## Auth
+For auth to work with inversify, we have to change some of the files.
+
+&nbsp;
+### Install Packages
+
+```bash
+pnpm i jsonwebtoken @types/jsonwebtoken bcrypt @types/bcrypt
+```
