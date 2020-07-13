@@ -1,12 +1,12 @@
+import config from 'config';
 import { NextFunction, Request, Response } from 'express';
 import { Container } from 'inversify';
-import TYPES from '../services/config/types';
 import jwt from 'jsonwebtoken';
-import { logger } from '../utils/logger';
-import config from 'config';
-import { DatabaseService } from '../services/database.service';
 import { DIContainer } from '../services/config/inversify.config';
-import { UtilService } from "../services/util.service";
+import TYPES from '../services/config/types';
+import { DatabaseService } from '../services/database.service';
+import { UtilService } from '../services/util.service';
+import { logger } from '../utils/logger';
 
 const secret: string = config.get('webToken.secret');
 

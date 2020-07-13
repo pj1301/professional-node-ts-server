@@ -1,10 +1,10 @@
-import {controller, httpPost, request, response} from "inversify-express-utils";
 import { Request, Response } from 'express';
-import { inject } from "inversify";
-import { DatabaseService } from "../services/database.service";
-import TYPES from "../services/config/types";
-import { TokenService } from "../services/token.service";
-import { SecurityService } from "../services/security.service";
+import { inject } from 'inversify';
+import {controller, httpPost, request, response} from 'inversify-express-utils';
+import TYPES from '../services/config/types';
+import { DatabaseService } from '../services/database.service';
+import { SecurityService } from '../services/security.service';
+import { TokenService } from '../services/token.service';
 
 @controller('/auth')
 export class AuthController {
