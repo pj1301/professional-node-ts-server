@@ -5,6 +5,7 @@ import { Application } from 'express';
 import { InversifyExpressServer } from 'inversify-express-utils';
 import './controllers/controller.module';
 import { setAppMiddleware } from './middleware/appMiddleware';
+import { exceptionHandler } from './middleware/exception-handler';
 import { DIContainer } from './services/config/inversify.config';
 import { logger } from './utils/logger';
 
@@ -17,6 +18,7 @@ export class App {
     const server = new InversifyExpressServer(container, null, { rootPath: '/api/v1' });
     this.app = server
       .setConfig((application: Application) => setAppMiddleware(application))
+      .setErrorConfig((application: Application) => application.use(exceptionHandler))
       .build();
   }
 

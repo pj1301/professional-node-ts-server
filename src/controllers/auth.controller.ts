@@ -1,10 +1,11 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { inject } from 'inversify';
-import {controller, httpPost, request, response} from 'inversify-express-utils';
+import {controller, httpPost, next, request, response} from 'inversify-express-utils';
 import TYPES from '../services/config/types';
 import { DatabaseService } from '../services/database.service';
 import { SecurityService } from '../services/security.service';
 import { TokenService } from '../services/token.service';
+import { InvalidCredentials } from '../utils/exceptions/credentials-exception';
 
 @controller('/auth')
 export class AuthController {
@@ -16,12 +17,11 @@ export class AuthController {
   ) {}
 
   @httpPost('/login')
-  public async login(@request() req: Request, @response() res: Response) {
-    const userResponse = await this.dbService.find('users', { email: req.body.email });
-    const user = userResponse[0];
-    if (!user) return res.status(500).send({ message: 'User credentials not valid' });
+  public async login(@request() req: Request, @response() res: Response, @next() nxt: NextFunction) {
+    const user = await this.dbService.findOne('users', { email: req.body.email });
+    if (!user) return nxt(new InvalidCredentials('User credentials not valid'));
     const checkedPw = await this.securityService.checkPw(user.password, req.body.password);
-    if (!checkedPw) return res.status(500).send({ message: 'User credentials not valid' });
+    if (!checkedPw) return nxt(new InvalidCredentials('User credentials not valid'));
     const token = this.tokenService.generateJWT(user._id, user.role);
     res.status(200).send(token);
   }
