@@ -1,5 +1,5 @@
-import { injectable } from 'inversify';
 import bcrypt from 'bcrypt';
+import { injectable } from 'inversify';
 import { logger } from '../utils/logger';
 
 @injectable()
@@ -16,8 +16,18 @@ export class SecurityService {
     }
     if (hash) return hash;
   }
-  
-  public decrypt(encryptedPassword: string): string {
-    return '';
+
+  public checkPw(encryptedPassword: string, stringPw: string): Promise<boolean> {
+    const evaluation = new Promise<boolean>((resolve, reject) => {
+      bcrypt.compare(stringPw, encryptedPassword, (err, result) => {
+        if (err) {
+          logger.error(err);
+          reject();
+          return;
+        }
+        resolve(result);
+      })
+    });
+    return evaluation;
   }
 }

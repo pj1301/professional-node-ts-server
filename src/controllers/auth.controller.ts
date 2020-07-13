@@ -17,19 +17,22 @@ export class AuthController {
 
   @httpPost('/login')
   public async login(@request() req: Request, @response() res: Response) {
-    const response = await this.dbService.find('users', { email: req.body.email });
-    const user = response[0];
+    const userResponse = await this.dbService.find('users', { email: req.body.email });
+    const user = userResponse[0];
     if (!user) return res.status(500).send({ message: 'User credentials not valid' });
-    if (req.body.password !== user.password) return res.status(500).send({ message: 'User credentials not valid' });
+    const checkedPw = await this.securityService.checkPw(user.password, req.body.password);
+    if (!checkedPw) return res.status(500).send({ message: 'User credentials not valid' });
     const token = this.tokenService.generateJWT(user._id, user.role);
     res.status(200).send(token);
   }
 
   @httpPost('/register')
   public async register(@request() req: Request, @response() res: Response) {
-    // const user = 
-    // this.securityService.encrypt(req.body.password);
-    const result = await this.dbService.createOne('users', req.body);
+    const { email, password, role } = req.body;
+    const encryptedPw = await this.securityService.encrypt(password);
+    const user = { email, password: encryptedPw, role };
+    const result = await this.dbService.createOne('users', user);
     result ? res.status(200).send(result) : res.status(500).send({ message: 'bad request' });
+    res.status(200);
   }
 }

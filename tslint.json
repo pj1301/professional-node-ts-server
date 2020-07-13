@@ -23,6 +23,7 @@
         "severity": "warning",
         "options": ["debug", "info", "log", "time", "timeEnd", "trace"]
     },
+    "one-variable-per-declaration": false,
     "ordered-imports": [
       true,
       {
