@@ -45,3 +45,13 @@ export { setAppMiddleware };
 &nbsp;
 ## Additional Middlewares
 For specialised middlewares, you should create separate files with exported functions which apply those middlewares. 
+
+&nbsp;
+### Exception Handler
+One of the additional middlewares we can add is an exception handler. Rather than sending errors from the components, we create a central location to handle errors and manage the termination of a web-request.
+
+Create a file for error handling in the middlewares folder:
+
+```ts
+
+```

@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { Db } from 'mongodb';
-import { IDbLocator, IDbLocatorMuliple } from './config/interfaces';
+import { IDbLocator, IDbLocatorMuliple } from '../models/database.interfaces';
 import TYPES from './config/types';
 
 @injectable()
@@ -9,6 +9,10 @@ export class DatabaseService {
   constructor(
     @inject(TYPES.DBClient) private dbConnection: Db
   ) {}
+
+  public async findOne(collection: string, filter: object): Promise<any> {
+    return await this.dbConnection.collection(collection).findOne(filter);
+  }
 
   public async find(collection: string, filter: object): Promise<any> {
     return await this.dbConnection.collection(collection).find(filter).toArray();

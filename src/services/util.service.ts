@@ -4,6 +4,7 @@ import { ObjectId, ObjectID } from 'mongodb';
 @injectable()
 export class UtilService {
 
+  // tslint:disable-next-line: no-empty
   constructor() {}
 
   public clone(value: any): any {
@@ -27,6 +28,11 @@ export class UtilService {
 
   public stringifyObjectId(id: ObjectId): string {
     return id.toHexString();
+  }
+
+  public validateObject(object: any): boolean {
+    if (!object || object === '') return false;
+    return true;
   }
 
   private deepObject(source: any) {
