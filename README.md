@@ -30,6 +30,15 @@ docker-compose up
 &nbsp;
 ## Issues
 
+&nbsp;
+### No binding for DBClient
+If you get the below message:
+
+```bash
+(node:3506) UnhandledPromiseRejectionWarning: Error: No matching bindings found for serviceIdentifier: Symbol(DBClient)
+```
+
+It is likely that the Mongo database is not running. Please check the running instance of MongoDB. 
 
 &nbsp;
 

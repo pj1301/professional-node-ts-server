@@ -10,5 +10,8 @@
       "useUnifiedTopology": true
     }
   },
+  "webToken": {
+    "secret": "xZWVF&HideF_A#eTlOFp"
+  },
   "port": "2000"
 }

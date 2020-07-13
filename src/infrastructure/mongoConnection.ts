@@ -2,7 +2,7 @@ import config from 'config';
 import { Db, MongoClient, MongoClientOptions } from 'mongodb';
 import { logger } from '../utils/logger';
 
-async function getConnection(): Promise<any> {
+async function getConnection(): Promise<Db | void> {
   const { db, url, mongodOpt } = config.get('mongoDb');
   let client;
   try {

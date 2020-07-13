@@ -1,13 +1,12 @@
 import express, { Request, Response } from 'express';
 import { inject } from 'inversify';
-import { controller, httpDelete, httpGet, httpPatch, httpPost, httpPut, interfaces, request, response } from 'inversify-express-utils';
-import { ObjectId } from 'mongodb';
+import { controller, httpDelete, httpGet, httpPatch, httpPost, request, response } from 'inversify-express-utils';
+import { verify } from '../security/token-verification';
 import TYPES from '../services/config/types';
 import { DatabaseService } from '../services/database.service';
 import { UtilService } from '../services/util.service';
-import { logger } from '../utils/logger';
 
-@controller('/test')
+@controller('/test', verify)
 export class TestController {
   private sendError = { message: 'Database operation failed' };
 
