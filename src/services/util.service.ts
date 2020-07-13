@@ -4,6 +4,7 @@ import { ObjectId, ObjectID } from 'mongodb';
 @injectable()
 export class UtilService {
 
+  // tslint:disable-next-line: no-empty
   constructor() {}
 
   public clone(value: any): any {
