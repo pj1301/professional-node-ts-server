@@ -29,6 +29,11 @@ export class UtilService {
     return id.toHexString();
   }
 
+  public validateObject(object: any): boolean {
+    if (!object || object === '') return false;
+    return true;
+  }
+
   private deepObject(source: any) {
     const result: any = {};
     Object.keys(source).forEach((key: string) => {
