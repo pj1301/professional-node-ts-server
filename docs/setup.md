@@ -27,15 +27,14 @@ _Regular `--save` is for packages that are required for the application to run, 
 
 &nbsp;
 ## Configure TypeScript and ESLint
-To generate a tsconfig.json file, run:	To generate a config file, run:
+To generate a tsconfig.json file, run:
 
 
-```bash	```bash
-tsc --init	npx eslint --init
-```	```
+```bash	
+tsc --init
+```
 
 You can leave the default configuration and move on.
-
 
 ESLint has now taken over from the depreciated TSLint. It should be set up as follows:
 
