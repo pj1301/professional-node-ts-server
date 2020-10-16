@@ -158,9 +158,9 @@ To use we need to create a config directory in the root of the project. Here we 
 
 ```bash
 ./config¬
-  --development
-  --staging
-  --production
+  --development.json
+  --staging.json
+  --production.json
 ```
 
 Each should contain a base object (not an array) - at least an empty object.
