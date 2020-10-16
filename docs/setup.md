@@ -20,72 +20,48 @@ To begin with we will add the following packages (starred require types packages
 You can run the following to install the packages and the required types packages where not integrated into the core package:
 
 ```bash
-npm i express morgan @types/morgan cors @types/cors typescript ts-node winston nodemon tslint config @types/config --save
+npm i express morgan @types/morgan cors @types/cors typescript ts-node winston nodemon eslint config @types/config --save
 ```
 
 _Regular `--save` is for packages that are required for the application to run, `--save-dev` is for development packages._
 
 &nbsp;
-## Configure TypeScript and TSLint
-You've already installed TypeScript and then ts-node to connect it to Node, now we need to configure TypeScript and TSLint to ensure our project will compile successfully. 
+## Configure TypeScript and ESLint
+ESLint has now taken over from the depreciated TSLint. It should be set up as follows:
 
-To generate a tsconfig.json file, run:
-
-```bash
-tsc --init
-```
-
-You can leave the default configuration and move on.
-
->Note: TSLint is being depreciated but there is not confirmed way forward at the time of writing so we have retained the old TSLint practice. 
-
-To generate a linter config file, use:
+To generate a config file, run:
 
 ```bash
-./node_modules/.bin/tslint --init
+npx eslint --init
 ```
 
-Linter config as follows:
+This will trigger a selection menu, pick the appropriate options. If you choose a JSON file config, you will get something like the following:
+
 
 ```json
-// ./src/tslint.json
+// ./src/.eslintrc.json
 
 {
-  "defaultSeverity": "error",
-  "extends": [
-      "tslint:recommended"
-  ],
-  "jsRules": {
-    "max-line-length": {
-      "options": [120]
-    }
-  },
-  "rules": {
-    "array-type": [true, "generic"],
-    "curly": [true, "ignore-same-line"],
-    "max-line-length": {
-      "options": [180]
+    "env": {
+        "browser": true,
+        "es2021": true
     },
-    "new-parens": true,
-    "no-arg": true,
-    "no-bitwise": true,
-    "no-conditional-assignment": true,
-    "no-consecutive-blank-lines": false,
-    "no-console": {
-        "severity": "warning",
-        "options": ["debug", "info", "log", "time", "timeEnd", "trace"]
-    },
-    "ordered-imports": [
-      true,
-      {
-        "import-sources-order": "lowercase-first",
-        "named-imports-order": "lowercase-first"
-      }
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended"
     ],
-    "quotemark": [true, "single", "avoid-escape", "avoid-template"]
-  },
-  "rulesDirectory": []
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": 12,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "@typescript-eslint"
+    ],
+    "rules": {
+    }
 }
+
 ```
 
 &nbsp;
