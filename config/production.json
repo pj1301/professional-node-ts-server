@@ -1,1 +1,17 @@
-{}
+{
+	"apiUrl": "/api/v1",
+	"allowedOrigins": [
+		"http://localhost:4200"
+	],
+	"mongoDb": {
+		"url": "mongodb://localhost:27017",
+		"db": "inversifyDB",
+		"mongodOpt": {
+			"useUnifiedTopology": true
+		}
+	},
+	"webToken": {
+		"secret": "xZWVF&HideF_A#eTlOFp"
+	},
+	"port": "2000"
+}
