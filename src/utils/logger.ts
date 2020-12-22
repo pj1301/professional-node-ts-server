@@ -1,8 +1,8 @@
-import { createLogger, format, transports, Logger } from "winston";
+import { createLogger, format, transports, Logger } from 'winston';
 
 const { combine, colorize, simple, timestamp } = format;
 
-const level: string = process.env.NODE_ENV === "production" ? "error" : "debug";
+const level: string = process.env.NODE_ENV === 'production' ? 'error' : 'debug';
 const formatOpt: any = combine(colorize(), simple(), timestamp());
 
 const loggerOptions = {

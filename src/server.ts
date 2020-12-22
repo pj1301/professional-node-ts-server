@@ -1,6 +1,6 @@
-import { App } from "./app";
-import { checkEnvironmentVariables } from "./utils/environment-validator";
-import { logger } from "./utils/logger";
+import { App } from './app';
+import { checkEnvironmentVariables } from './utils/environment-validator';
+import { logger } from './utils/logger';
 
 const app: App = new App();
 

@@ -1,22 +1,22 @@
-import "reflect-metadata";
+import 'reflect-metadata';
 
-import config from "config";
-import { Application } from "express";
-import { InversifyExpressServer } from "inversify-express-utils";
-import "./controllers/controller.module";
-import { setAppMiddleware } from "./middleware/appMiddleware";
-import { exceptionHandler } from "./middleware/exception-handler";
-import { DIContainer } from "./services/config/inversify.config";
-import { logger } from "./utils/logger";
+import config from 'config';
+import { Application } from 'express';
+import { InversifyExpressServer } from 'inversify-express-utils';
+import './controllers/controller.module';
+import { setAppMiddleware } from './middleware/appMiddleware';
+import { exceptionHandler } from './middleware/exception-handler';
+import { DIContainer } from './services/config/inversify.config';
+import { logger } from './utils/logger';
 
 export class App {
-	private port: string = process.env.PORT || config.get("port");
+	private port: string = process.env.PORT || config.get('port');
 	public app!: Application;
 
 	public async init() {
 		const container = await DIContainer.makeContainer();
 		const server = new InversifyExpressServer(container, null, {
-			rootPath: "/api/v1",
+			rootPath: '/api/v1',
 		});
 		this.app = server
 			.setConfig((application: Application) => setAppMiddleware(application))

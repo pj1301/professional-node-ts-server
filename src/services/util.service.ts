@@ -1,5 +1,5 @@
-import { injectable } from "inversify";
-import { ObjectId, ObjectID } from "mongodb";
+import { injectable } from 'inversify';
+import { ObjectId, ObjectID } from 'mongodb';
 
 @injectable()
 export class UtilService {
@@ -7,7 +7,7 @@ export class UtilService {
 	constructor() {}
 
 	public clone(value: any): any {
-		if (typeof value !== "object" || value === null) {
+		if (typeof value !== 'object' || value === null) {
 			return value;
 		}
 		if (Array.isArray(value)) {
@@ -30,7 +30,7 @@ export class UtilService {
 	}
 
 	public validateObject(object: any): boolean {
-		if (!object || object === "") return false;
+		if (!object || object === '') return false;
 		return true;
 	}
 

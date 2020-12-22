@@ -1,13 +1,13 @@
-import { Container } from "inversify";
-import { Db } from "mongodb";
-import TYPES from "./types";
+import { Container } from 'inversify';
+import { Db } from 'mongodb';
+import TYPES from './types';
 
 // import services below
-import { getConnection } from "../../infrastructure/mongo-connection";
-import { DatabaseService } from "../database.service";
-import { SecurityService } from "../security.service";
-import { TokenService } from "../token.service";
-import { UtilService } from "../util.service";
+import { getConnection } from '../../infrastructure/mongo-connection';
+import { DatabaseService } from '../database.service';
+import { SecurityService } from '../security.service';
+import { TokenService } from '../token.service';
+import { UtilService } from '../util.service';
 
 export class DIContainer {
 	private static container: Container;

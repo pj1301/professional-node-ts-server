@@ -1,7 +1,7 @@
-import { inject, injectable } from "inversify";
-import { Db } from "mongodb";
-import { IDbLocator, IDbLocatorMuliple } from "../models/database.interfaces";
-import TYPES from "./config/types";
+import { inject, injectable } from 'inversify';
+import { Db } from 'mongodb';
+import { IDbLocator, IDbLocatorMuliple } from '../models/database.interfaces';
+import TYPES from './config/types';
 
 @injectable()
 export class DatabaseService {

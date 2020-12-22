@@ -1,6 +1,6 @@
-import bcrypt from "bcrypt";
-import { injectable } from "inversify";
-import { logger } from "../utils/logger";
+import bcrypt from 'bcrypt';
+import { injectable } from 'inversify';
+import { logger } from '../utils/logger';
 
 @injectable()
 export class SecurityService {
