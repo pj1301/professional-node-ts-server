@@ -1,84 +1,75 @@
-import express, { NextFunction, Request, Response } from "express";
-import { inject } from "inversify";
-import {
-	controller,
-	httpDelete,
-	httpGet,
-	httpPatch,
-	httpPost,
-	next,
-	request,
-	response,
-} from "inversify-express-utils";
-import { verify } from "../security/token-verification";
-import TYPES from "../services/config/types";
-import { DatabaseService } from "../services/database.service";
-import { UtilService } from "../services/util.service";
-import { InformationNotFound } from "../utils/exceptions/not-found-exception";
+import express, { NextFunction, Request, Response } from 'express';
+import { inject } from 'inversify';
+import { controller, httpDelete, httpGet, httpPatch, httpPost, next, request, response } from 'inversify-express-utils';
+import { verify } from '../security/token-verification';
+import TYPES from '../services/config/types';
+import { DatabaseService } from '../services/database.service';
+import { UtilService } from '../services/util.service';
+import { InformationNotFound } from '../utils/exceptions/not-found-exception';
 
-@controller("/test", verify)
+@controller('/test', verify)
 export class TestController {
 	constructor(
 		@inject(TYPES.DatabaseService) private dbService: DatabaseService,
 		@inject(TYPES.UtilService) private utilService: UtilService
 	) {}
 
-	@httpGet("/")
+	@httpGet('/')
 	public async getTestData(
 		@request() req: express.Request,
 		@response() res: express.Response,
 		@next() nxt: NextFunction
 	) {
-		const result = await this.dbService.find("test", {});
+		const result = await this.dbService.find('test', {});
 		result ? res.status(200).send(result) : nxt(new InformationNotFound());
 	}
 
-	@httpPost("/")
+	@httpPost('/')
 	public async postTestData(
 		@request() req: express.Request,
 		@response() res: express.Response,
 		@next() nxt: NextFunction
 	) {
-		const result = await this.dbService.createOne("test", req.body);
+		const result = await this.dbService.createOne('test', req.body);
 		result ? res.status(200).send(result) : nxt(new InformationNotFound());
 	}
 
-	@httpPost("/multiple")
+	@httpPost('/multiple')
 	public async postTestDataMultiple(
 		@request() req: express.Request,
 		@response() res: express.Response,
 		@next() nxt: NextFunction
 	) {
-		const result = await this.dbService.createMany("test", req.body);
+		const result = await this.dbService.createMany('test', req.body);
 		result ? res.status(200).send(result) : nxt(new InformationNotFound());
 	}
 
-	@httpGet("/:id")
+	@httpGet('/:id')
 	public async getOneTestData(
 		@request() req: express.Request,
 		@response() res: express.Response,
 		@next() nxt: NextFunction
 	) {
 		const locator = { _id: this.utilService.objectifyId(req.params.id) };
-		const result = await this.dbService.findOne("test", locator);
+		const result = await this.dbService.findOne('test', locator);
 		result ? res.status(200).send(result) : nxt(new InformationNotFound());
 	}
 
-	@httpPatch("/:id")
+	@httpPatch('/:id')
 	public async patchTestData(
 		@request() req: express.Request,
 		@response() res: express.Response,
 		@next() nxt: NextFunction
 	) {
 		const locator = { _id: this.utilService.objectifyId(req.params.id) };
-		const result = await this.dbService.updateOne("test", locator, req.body);
+		const result = await this.dbService.updateOne('test', locator, req.body);
 		result ? res.status(200).send(result) : nxt(new InformationNotFound());
 	}
 
-	@httpDelete("/:id")
+	@httpDelete('/:id')
 	public async deleteTestData(@request() req: Request, res: Response) {
 		const locator = { _id: this.utilService.objectifyId(req.params.id) };
-		const result = await this.dbService.deleteOne("test", locator);
+		const result = await this.dbService.deleteOne('test', locator);
 		res.status(200);
 	}
 }

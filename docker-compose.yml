@@ -19,6 +19,5 @@ services:
       ports:
         - 27017:27017
       volumes:
-        - ./docker_seeds/data:/usr/server_container/seeds
-        - ./docker_seeds/scripts:/docker-entrypoint-initdb.d
-
+        - ./seed/data:/usr/server_container/seeds
+        - ./seed/scripts:/docker-entrypoint-initdb.d
