@@ -7,14 +7,21 @@ import TYPES from './config/types';
 export class DatabaseService {
 	constructor(@inject(TYPES.DBClient) private dbConnection: Db) {}
 
-	public async findOne(collection: string, filter: object): Promise<any> {
-		return await this.dbConnection.collection(collection).findOne(filter);
+	public async findOne(collection: string, query: object): Promise<any> {
+		return await this.dbConnection.collection(collection).findOne(query);
 	}
 
-	public async find(collection: string, filter: object): Promise<any> {
+	public async find(collection: string, query: object): Promise<any> {
 		return await this.dbConnection
 			.collection(collection)
-			.find(filter)
+			.find(query)
+			.toArray();
+	}
+
+	public async findWithFilter(collection: string, query: object, filter: any): Promise<any> {
+		return await this.dbConnection
+			.collection(collection)
+			.find(query, filter)
 			.toArray();
 	}
 
