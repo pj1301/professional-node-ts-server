@@ -27,14 +27,9 @@ export class AuthController {
 		@request() req: Request,
 		@response() res: Response
 	): Promise<void> {
-		const user = await this.dbService.findOne('users', {
-			email: req.body.email,
-		});
+		const user = await this.dbService.findOne('users', { email: req.body.email });
 		if (!user) throw new InvalidCredentials();
-		const checkedPw = await this.securityService.checkPw(
-			user.password,
-			req.body.password
-		);
+		const checkedPw = await this.securityService.checkPw(user.password, req.body.password);
 		if (!checkedPw) throw new InvalidCredentials();
 		const token = this.tokenService.generateJWT(user._id, user.role, user.tokenId);
 		if (token) {

@@ -11,6 +11,10 @@ export class DatabaseService {
 		return await this.dbConnection.collection(collection).findOne(query);
 	}
 
+	public async findOneWithFilter(collection: string, query: object, filter: any): Promise<any> {
+		return await this.dbConnection.collection(collection).findOne(query, filter);
+	}
+
 	public async find(collection: string, query: object): Promise<any> {
 		return await this.dbConnection
 			.collection(collection)

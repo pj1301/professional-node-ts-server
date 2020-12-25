@@ -34,12 +34,11 @@ async function verify(
 	const container: Container = DIContainer.getContainer();
 	const dbService = container.get<DatabaseService>(TYPES.DatabaseService);
 	const utilService = container.get<UtilService>(TYPES.UtilService);
-	const user: RequestUser = await dbService.findWithFilter(
+	const user: RequestUser = await dbService.findOneWithFilter(
 		'users',
 		{ _id: utilService.objectifyId(id) },
 		{ projection: { password: 0  }}
 	);
-
 	if (user && tokenId === user.tokenId) {
 		req.user = user;
 		next();
