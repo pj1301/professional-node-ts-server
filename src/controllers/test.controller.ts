@@ -21,7 +21,11 @@ export class TestController {
 		@next() nxt: NextFunction
 	) {
 		const result = await this.dbService.find('test', {});
-		result ? res.status(200).send(result) : nxt(new InformationNotFound());
+		if (result) {
+			res.status(200).send(result)
+		 } else {
+			throw new InformationNotFound();
+		 }
 	}
 
 	@httpPost('/')
@@ -41,7 +45,11 @@ export class TestController {
 		@next() nxt: NextFunction
 	) {
 		const result = await this.dbService.createMany('test', req.body);
-		result ? res.status(200).send(result) : nxt(new InformationNotFound());
+		if (result) {
+			res.status(200).send(result);
+		} else {
+			throw new InformationNotFound();
+		}
 	}
 
 	@httpGet('/:id')
@@ -52,7 +60,11 @@ export class TestController {
 	) {
 		const locator = { _id: this.utilService.objectifyId(req.params.id) };
 		const result = await this.dbService.findOne('test', locator);
-		result ? res.status(200).send(result) : nxt(new InformationNotFound());
+		if (result) {
+			res.status(200).send(result);
+		} else {
+			throw new InformationNotFound();
+		}
 	}
 
 	@httpPatch('/:id')
@@ -63,7 +75,11 @@ export class TestController {
 	) {
 		const locator = { _id: this.utilService.objectifyId(req.params.id) };
 		const result = await this.dbService.updateOne('test', locator, req.body);
-		result ? res.status(200).send(result) : nxt(new InformationNotFound());
+		if (result) {
+			res.status(200).send(result);
+		} else {
+			new InformationNotFound();
+		}
 	}
 
 	@httpDelete('/:id')
