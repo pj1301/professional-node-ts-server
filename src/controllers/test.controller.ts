@@ -78,7 +78,7 @@ export class TestController {
 		if (result) {
 			res.status(200).send(result);
 		} else {
-			new InformationNotFound();
+			throw new InformationNotFound();
 		}
 	}
 
