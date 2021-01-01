@@ -6,19 +6,21 @@ As usual, this file is simply for set up, running and common issues. For guides 
 
 &nbsp;
 ## Run
-To run from node in development mode:
+To run from node in development mode (Mongo instance must be running locally):
 
 ```bash
 npm run dev
 ```
 
-To run from node in production mode:
+To seed: make sure that the Mongo instance is running and then run `bash docker_seeds/scripts/seed.sh`.
+
+To run from node in production mode (Mongo instance must be running locally/on server):
 
 ```bash
 npm start
 ```
 
-To run via Docker (production only), run:
+To run via Docker, run:
 
 ```bash
 docker-compose up

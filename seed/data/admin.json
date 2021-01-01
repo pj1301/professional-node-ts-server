@@ -1,0 +1,7 @@
+{
+    "username": "Admin",
+    "email": "admin@test.com",
+    "password": "$2b$10$Y/9ddj4mEYwP8hRhphlqPOL7yMKuZB/V5FbDkMCUP.xG9zFF1Hwp2",
+    "role": "admin",
+    "tokenId": "75f77c00-3ae4-11eb-bbab-79b8fafebaaa"
+}

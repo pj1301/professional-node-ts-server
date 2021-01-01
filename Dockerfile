@@ -1,17 +1,21 @@
-FROM node:14.4-alpine3.10
+FROM node:15.3.0
 
-WORKDIR /server_container
+# set arguments
+ARG DIR=/usr/server_container
+ARG PORT=2000
+ARG ENV=development
+ARG MONGO_URL=mongodb://professional-db:27017
 
-RUN mkdir -p /server_container/node_modules && chown -R node:node /server_container
+# create container directories
+WORKDIR ${DIR}
 
+# set working directory and environment variables
+ENV PORT=${PORT} NODE_ENV=${ENV} MONGO_URL=${MONGO_URL} PATH=${DIR}/node_modules/.bin:$PATH
+
+# copy files, install dependencies and create container
 COPY package*.json ./
-
-USER node
-
-RUN npm install
-
-COPY --chown=node:node . .
-
+RUN npm i
+COPY . .
 EXPOSE 2000
-
-CMD ["npm", "start"]
+USER node
+CMD nodemon ./src/server.ts

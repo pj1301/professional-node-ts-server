@@ -1,0 +1,1 @@
+mongoimport --db inversifyDB -c users --file /usr/server_container/seeds/admin.json

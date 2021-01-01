@@ -1,18 +1,15 @@
-import {ObjectId} from 'mongodb';
+import { ObjectId } from 'mongodb';
 
 interface IDbLocator {
-  _id: ObjectId;
+	_id: ObjectId;
 }
 
 interface IDbLocatorMuliple {
-  _id: IMultiQueryById;
+	_id: IMultiQueryById;
 }
 
 interface IMultiQueryById {
-  $in: Array<ObjectId>
+	$in: Array<ObjectId>;
 }
 
-export {
-  IDbLocator,
-  IDbLocatorMuliple
-}
+export { IDbLocator, IDbLocatorMuliple };

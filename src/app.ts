@@ -10,19 +10,25 @@ import { DIContainer } from './services/config/inversify.config';
 import { logger } from './utils/logger';
 
 export class App {
-  private port: string = process.env.PORT || config.get('port');
-  public app!: Application;
+	private port: string = process.env.PORT || config.get('port');
+	public app!: Application;
 
-  public async init() {
-    const container = await DIContainer.makeContainer();
-    const server = new InversifyExpressServer(container, null, { rootPath: '/api/v1' });
-    this.app = server
-      .setConfig((application: Application) => setAppMiddleware(application))
-      .setErrorConfig((application: Application) => application.use(exceptionHandler))
-      .build();
-  }
+	public async init() {
+		const container = await DIContainer.makeContainer();
+		const server = new InversifyExpressServer(container, null, {
+			rootPath: '/api/v1',
+		});
+		this.app = server
+			.setConfig((application: Application) => setAppMiddleware(application))
+			.setErrorConfig((application: Application) =>
+				application.use(exceptionHandler)
+			)
+			.build();
+	}
 
-  public listen() {
-    this.app.listen(this.port, () => logger.info(`Server running on port ${this.port}`));
-  }
+	public listen() {
+		this.app.listen(this.port, () =>
+			logger.info(`Server running on port ${this.port}`)
+		);
+	}
 }

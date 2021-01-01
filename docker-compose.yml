@@ -1,19 +1,23 @@
 version: "3.8"
 
 services: 
-  server:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: node-server
-    container_name: node-server 
+  node:
+    container_name: professional-api
+    build: .
     restart: unless-stopped
     volumes: 
-      - .:/src
-      - node_modules:/src/node_modules
+      - .:/usr/server_container
+      - /usr/server_container/node_modules
     ports:
-      - "2000:2000"
-    command: npm start
+      - 2000:2000
+    links:
+      - mongo
 
-volumes:
-  node_modules:
+  mongo:
+      container_name: professional-db
+      image: mongo:latest
+      ports:
+        - 27017:27017
+      volumes:
+        - ./seed/data:/usr/server_container/seeds
+        - ./seed/scripts:/docker-entrypoint-initdb.d
